@@ -4,8 +4,10 @@ import Map from './components/Map.vue';
 import { onMounted, ref, type Ref } from 'vue';
 import type { Update } from './libs/data';
 import SensorBlock from './components/SensorBlock.vue';
+import { getSpot } from './libs/spot';
 
 const data: Ref<Update | null> = ref(null)
+const spotData: Ref<any | null> = ref(null)
 
 async function update() {
     try {
@@ -19,14 +21,37 @@ async function update() {
         //     data.value.longitude = -74.22 * 100000
         // }
 
+        // const spot = await getSpot()
+        // console.log(spot)
+        // console.log(spot?.response?.feedMessageResponse?.messages)
+        // if(spot?.response?.feedMessageResponse?.messages && spot.response.feedMessageResponse.messages.length > 0) {
+        //     spotData.value = spot.response.feedMessageResponse.messages[0]
+        // }
+
         setTimeout(update, 1000);
     } catch{
         setTimeout(update, 1000);
     }
 }
 
+async function updateSpot() {
+    try {
+        const spot = await getSpot()
+        console.log(spot)
+        console.log(spot?.response?.feedMessageResponse?.messages?.message)
+        if(spot?.response?.feedMessageResponse?.messages?.message && spot.response.feedMessageResponse.messages.message.length > 0) {
+            spotData.value = spot.response.feedMessageResponse.messages.message[0]
+        }
+
+        setTimeout(update, 30000);
+    } catch{
+        setTimeout(update, 30000);
+    }
+}
+
 onMounted(async () => {
     update()
+    updateSpot()
 })
 
 const gpsFixModes = [ 'No Fix', 'Prediction', '2D', '3D', 'Differential' ]
@@ -73,6 +98,15 @@ const gpsFixModes = [ 'No Fix', 'Prediction', '2D', '3D', 'Differential' ]
                 <span>Acceleration: {{ data.ax.toFixed(2) }}, {{ data.ay.toFixed(2) }}, {{ data.az.toFixed(2) }} m/s^2</span>
                 <span>Gyro: {{ data.gx.toFixed(3) }}, {{ data.gy.toFixed(3) }}, {{ data.gz.toFixed(3) }} rad/s</span>
                 <span>Gyro: {{ data.mx.toFixed(2) }}, {{ data.my.toFixed(2) }}, {{ data.mz.toFixed(2) }} mT</span>
+            </SensorBlock>
+
+            <SensorBlock label="Spot" :valid="spotData != null">
+                <span>Id: {{ spotData?.id }}</span>
+                <span>Timestamp: {{ spotData?.dateTime }}</span>
+                <span>Latitude: {{ spotData?.latitude }}</span>
+                <span>Longitude: {{ spotData?.longitude }}</span>
+                <span>Altitude: {{ spotData?.altitude }}</span>
+                <span>Battery State: {{ spotData?.batteryState }}</span>
             </SensorBlock>
         </div>
     </div>
