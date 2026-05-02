@@ -1,6 +1,7 @@
 export type Update = {
     id: number,
     timestamp: number,
+    beacon: string,
 
     gpsValid: boolean,
     gpsFix: number,

@@ -21,7 +21,7 @@ onMounted(async () => {
     })
 
     map.on('load', async () => {
-        const result = await predict(42.2, -74.22, 0, '2026-05-01T19:22:23.000Z', 5, 30000, 5)
+        const result = await predict(42.2, -74.22, 0, '2026-05-02T19:22:23.000Z', 5, 30000, 5)
 
         const stages = result.prediction.map(stage => ({
             stage: stage.stage,

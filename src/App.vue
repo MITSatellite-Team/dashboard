@@ -41,6 +41,7 @@ const gpsFixModes = [ 'No Fix', 'Prediction', '2D', '3D', 'Differential' ]
             <SensorBlock label="Latest Packet" :valid="true">
                 <span>Id: {{ data.id }}</span>
                 <span>Timestamp: {{ new Date(data.timestamp * 1000).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'medium', timeZone: 'America/New_York' }) }}</span>
+                <span>Beacon: {{ data.beacon }}</span>
             </SensorBlock>
 
             <SensorBlock label="GPS" :valid="data.gpsValid" :warn="data.gpsFix < 2">
