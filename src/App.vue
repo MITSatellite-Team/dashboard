@@ -14,10 +14,10 @@ async function update() {
 
         data.value = json
 
-        if(data.value && data.value.gpsFix === 0) {
-            data.value.latitude = 42.2 * 100000
-            data.value.longitude = -74.22 * 100000
-        }
+        // if(data.value && data.value.gpsFix === 0) {
+        //     data.value.latitude = 42.2 * 100000
+        //     data.value.longitude = -74.22 * 100000
+        // }
 
         setTimeout(update, 1000);
     } catch{
