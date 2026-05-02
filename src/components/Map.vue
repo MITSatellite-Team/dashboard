@@ -27,6 +27,7 @@ const mapContainer = ref<HTMLElement | null>(null)
 let map: maplibregl.Map | null = null
 let gpsMarker: maplibregl.Marker | null = null
 let landingMarker: maplibregl.Marker | null = null
+const predictedLocation: Ref<any | null> = ref(null)
 
 async function updatePrediction(update = true) {
     if(!map) return
@@ -80,8 +81,12 @@ async function updatePrediction(update = true) {
             })
         }
 
-        const lastStage = stages.at(-1)?.coords.at(-1)
-        if (lastStage) landingMarker = new maplibregl.Marker().setLngLat(lastStage).addTo(map)
+        const lastLocation = stages.at(-1)?.coords.at(-1)
+        if (lastLocation) {
+            landingMarker = new maplibregl.Marker().setLngLat(lastLocation).addTo(map)
+
+            predictedLocation.value = lastLocation
+        }
     } catch{}
 
     if(update) setTimeout(updatePrediction, 60000)
@@ -152,44 +157,75 @@ onUnmounted(() => {
 </script>
 
 <template>
-    <div>
-        <h3>Predict</h3>
+    <div class="map-tools">
         <div>
-            <input type="time" v-model="launchTime">
-            <input type="date" v-model="launchDate">
-        </div>
-        
-        <div>
-            <span>Latitude</span>
-            <input type="number" v-model="launchLattitude">
-        </div>
-        
-        <div>
-            <span>Longitude</span>
-            <input type="number" v-model="launchLongitude">
+            <h3>Predict</h3>
+
+            <div class="label">
+                <input type="time" v-model="launchTime">
+                <input type="date" v-model="launchDate">
+            </div>
+            
+            <div class="label">
+                <span>Latitude</span>
+                <input type="number" v-model="launchLattitude">
+            </div>
+            
+            <div class="label">
+                <span>Longitude</span>
+                <input type="number" v-model="launchLongitude">
+            </div>
+
+            <div class="label">
+                <span>Altitude</span>
+                <input type="number" v-model="launchAltitude">
+            </div>
+
+            <div class="label">
+                <span>Ascent Rate</span>
+                <input type="number" v-model="ascentRate">
+            </div>
+
+            <div class="label">
+                <span>Descent Rate</span>
+                <input type="number" v-model="descentRate">
+            </div>
+
+            <div class="label">
+                <span>Burst Altitude</span>
+                <input type="number" v-model="burstAltitude">
+            </div>
+
+            <button @click="updatePrediction(false)">Predict</button>
         </div>
 
-        <div>
-            <span>Altitude</span>
-            <input type="number" v-model="launchAltitude">
+        <div v-if="predictedLocation">
+            <h3>Predicted Location</h3>
+
+            <div class="label">
+                <span>Latitude</span>
+                <span>{{ predictedLocation[1].toFixed(5) }}</span>
+            </div>
+            
+            <div class="label">
+                <span>Longitude</span>
+                <span>{{ predictedLocation[0].toFixed(5) }}</span>
+            </div>
         </div>
 
-        <div>
-            <span>Ascent Rate</span>
-            <input type="number" v-model="ascentRate">
-        </div>
+        <div v-if="deviceLocation">
+            <h3>Your Location</h3>
 
-        <div>
-            <span>Descent Rate</span>
-            <input type="number" v-model="descentRate">
+            <div class="label">
+                <span>Latitude</span>
+                <span>{{ deviceLocation.latitude.toFixed(5) }}</span>
+            </div>
+            
+            <div class="label">
+                <span>Longitude</span>
+                <span>{{ deviceLocation.longitude.toFixed(5) }}</span>
+            </div>
         </div>
-
-        <div>
-            <span>Burst Altitude</span>
-            <input type="number" v-model="burstAltitude">
-        </div>
-
-        <button @click="updatePrediction(false)">Predict</button>
     </div>
 
     <div ref="mapContainer" class="map" />
@@ -199,5 +235,15 @@ onUnmounted(() => {
 .map {
     width: 100%;
     height: 100%;
+}
+
+.map-tools {
+    display: flex;
+    gap: 40px;
+}
+
+.label {
+    display: flex;
+    gap: 20px;
 }
 </style>
