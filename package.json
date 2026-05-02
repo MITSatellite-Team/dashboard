@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "serve": "vite preview --host --port 8081"
+    "serve": "vite preview --host --port 80"
   },
   "dependencies": {
     "@vue-leaflet/vue-leaflet": "^0.10.1",
