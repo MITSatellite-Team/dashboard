@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "serve": "vite preview --host --port 8080"
   },
   "dependencies": {
     "@vue-leaflet/vue-leaflet": "^0.10.1",
