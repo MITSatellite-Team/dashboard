@@ -14,7 +14,7 @@ async function update() {
 
         data.value = json
 
-        if(data.value) {
+        if(data.value && data.value.gpsFix === 0) {
             data.value.latitude = 42.2 * 100000
             data.value.longitude = -74.22 * 100000
         }
@@ -46,8 +46,8 @@ const gpsFixModes = [ 'No Fix', 'Prediction', '2D', '3D', 'Differential' ]
 
             <SensorBlock label="GPS" :valid="data.gpsValid" :warn="data.gpsFix < 2">
                 <span>Fix: {{ gpsFixModes[data.gpsFix] }}</span>
-                <span>Latitude: {{ (data.latitude / 100000).toFixed(3) }}°</span>
-                <span>Longitude: {{ (data.longitude / 100000).toFixed(3) }}°</span>
+                <span>Latitude: {{ (data.latitude / 100000).toFixed(5) }}°</span>
+                <span>Longitude: {{ (data.longitude / 100000).toFixed(5) }}°</span>
                 <span>Altitude: {{ (data.altitude).toFixed(2) }} m</span>
             </SensorBlock>
 

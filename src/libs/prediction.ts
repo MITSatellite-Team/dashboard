@@ -16,7 +16,5 @@ export async function predict(latitude: number, longitude: number, altitude: num
     const response = await fetch(`${tawhiriUrl}?${query}`)
     const json = await response.json()
 
-    console.log(json)
-
     return json
 }
