@@ -1,48 +1,29 @@
 <script setup lang="ts">
+import StatusIndicator from './StatusIndicator.vue'
+import Block from './Block.vue'
+
 defineProps<{ label: string, valid: boolean, warn?: boolean }>()
 </script>
 
 <template>
-    <div class="sensor-block">
-        <div class="label">
-            <span class="indicator" :class="{ warn: warn, failed: !valid }"> {{ valid ? 'OK' : 'FAIL' }} </span>
+	<Block>
+    	<div class="label">
+			<status-indicator :valid="valid" :warn="warn" />
             <span>{{ label }}</span>
         </div>
         
         <slot />
-    </div>
+	</Block>
 </template>
 
 <style scoped>
-.sensor-block {
-    border: 1px black solid;
-
-    padding: 20px;
-
-    display: flex;
-    flex-direction: column;
-
-    width: fit-content;
-}
-
 .label {
     display: flex;
     gap: 20px;
 
     align-items: center;
+
+	color: var(--text);
 }
 
-.indicator {
-    background: greenyellow;
-
-    padding: 8px;
-}
-
-.indicator.warn {
-    background: orange;
-}
-
-.indicator.failed {
-    background: red;
-}
 </style>

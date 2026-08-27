@@ -233,8 +233,8 @@ onUnmounted(() => {
 
 <style scoped>
 .map {
-    width: 100%;
-    height: 100%;
+    width: 800px;
+    height: 600px;
 }
 
 .map-tools {
